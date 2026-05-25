@@ -523,11 +523,14 @@
         4: 'B2 \u2014 Upper Intermediate',
         5: 'C1 \u2014 Advanced',
       };
+      const TOUCH_DEVICE_QUERY = '(hover: none), (pointer: coarse)';
+      const touchMode = window.matchMedia(TOUCH_DEVICE_QUERY).matches;
 
       const tip = document.createElement('div');
       tip.className = 'sl-tooltip';
       tip.setAttribute('role', 'tooltip');
       document.body.appendChild(tip);
+      let activeWord = null;
 
       function show(target) {
         const original = target.dataset.original;
@@ -559,10 +562,12 @@
         tierEl.textContent = TIER_LABELS[tier] || 'Tier ' + tier;
         tip.appendChild(tierEl);
 
-        const actionEl = document.createElement('div');
-        actionEl.className = 'sl-tooltip__action';
-        actionEl.textContent = 'Click to mark as known';
-        tip.appendChild(actionEl);
+        if (touchMode) {
+          const actionEl = document.createElement('div');
+          actionEl.className = 'sl-tooltip__action';
+          actionEl.textContent = 'Tap again to dismiss';
+          tip.appendChild(actionEl);
+        }
 
         tip.classList.add('sl-tooltip--visible');
 
@@ -583,17 +588,41 @@
 
       function hide() {
         tip.classList.remove('sl-tooltip--visible');
+        activeWord = null;
       }
 
-      document.addEventListener('mouseover', (e) => {
-        const word = e.target.closest('.sl-word');
-        if (word) show(word);
-      });
+      if (touchMode) {
+        document.addEventListener('click', (e) => {
+          const word = e.target.closest('.sl-word');
+          if (!word) {
+            hide();
+            return;
+          }
 
-      document.addEventListener('mouseout', (e) => {
-        const word = e.target.closest('.sl-word');
-        if (word) hide();
-      });
+          e.preventDefault();
+          e.stopPropagation();
+
+          if (activeWord === word) {
+            hide();
+            return;
+          }
+
+          activeWord = word;
+          show(word);
+        });
+
+        document.addEventListener('scroll', hide, { capture: true, passive: true });
+      } else {
+        document.addEventListener('mouseover', (e) => {
+          const word = e.target.closest('.sl-word');
+          if (word) show(word);
+        });
+
+        document.addEventListener('mouseout', (e) => {
+          const word = e.target.closest('.sl-word');
+          if (word) hide();
+        });
+      }
     })();
   </script>
 
