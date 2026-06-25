@@ -58,10 +58,10 @@ async function main() {
       console.log('Screenshot 1: replacement — done');
 
       // --- Screenshot 2: Tooltip on hover ---
-      // Find a compound replacement for a nice tooltip
-      const compoundSpan = page.locator('.sideload-word[data-gender]').first();
-      await compoundSpan.scrollIntoViewIfNeeded();
-      await compoundSpan.hover();
+      // Find a replaced word for a nice tooltip
+      const wordSpan = page.locator('.sideload-word').first();
+      await wordSpan.scrollIntoViewIfNeeded();
+      await wordSpan.hover();
       await page.waitForSelector('.sideload-tooltip--visible', { timeout: 3000 });
       await page.waitForTimeout(500); // Let async seen count load
       await page.screenshot({

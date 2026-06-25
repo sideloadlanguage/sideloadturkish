@@ -7,7 +7,9 @@ import { test, expect } from './extension.fixture.js';
 
 const BASE_URL = 'http://localhost:8384';
 
-test.describe('Article-noun compound replacement', () => {
+// Removed for Turkish: article-noun compounds were a Spanish gendered-article feature.
+// Turkish has no grammatical gender or articles, so this replacement path was deleted.
+test.describe.skip('Article-noun compound replacement (removed for Turkish)', () => {
   test('replaces "the house" with "la casa" as a single span', async ({ extensionPage }) => {
     await extensionPage.goto(`${BASE_URL}/page-with-articles.html`);
     // Wait for content script to run

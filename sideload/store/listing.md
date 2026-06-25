@@ -1,18 +1,18 @@
 # Chrome Web Store Listing
 
 ## Title (max 45 chars)
-Sideload Spanish — Learn While Browsing
+Sideload Turkish — Learn While Browsing
 
 ## Short Description (max 132 chars)
-Learn Spanish naturally while browsing. Words on pages are replaced with Spanish translations based on your level.
+Learn Turkish naturally while browsing. Words on pages are replaced with Turkish translations based on your level.
 
 ## Detailed Description
 
-Learn Spanish without leaving your browser. Sideload Spanish replaces English words on any web page with their Spanish translations — starting simple and getting harder as you progress.
+Learn Turkish without leaving your browser. Sideload Turkish replaces English words on any web page with their Turkish translations — starting simple and getting harder as you progress.
 
 HOW IT WORKS
 
-Browse the web normally. Common English words are replaced inline with Spanish. Hover to see the original word and its translation. Click to mark a word as "known" and advance your progress.
+Browse the web normally. Common English words are replaced inline with Turkish. Hover to see the original word and its translation. Click to mark a word as "known" and advance your progress.
 
 PROGRESSIVE DIFFICULTY
 
@@ -20,7 +20,6 @@ Start with the 500 most common words (A1 level). As you master them, harder voca
 
 SMART FEATURES
 
-- Article-noun compounds: "the house" becomes "la casa" (not "el casa") with correct gendered articles
 - Struggling word detection: words you keep seeing but can't remember get highlighted
 - Tier readiness: see at a glance whether you're ready to advance
 - Works on dynamic pages: infinite scroll, single-page apps — all handled
@@ -32,12 +31,12 @@ Everything stays on your device. No accounts, no data collection, no tracking. Y
 WHAT'S INCLUDED
 
 - 3,600+ word vocabulary across 5 difficulty tiers
-- Hover tooltips with translations, gender, and frequency tier
+- Hover tooltips with translations and frequency tier
 - Progress dashboard with tier breakdown
 - Density control: choose how many words get replaced
 - Domain blacklist for sites where you don't want replacement
 
-Perfect for beginners starting their Spanish journey or intermediate learners maintaining daily exposure.
+Perfect for beginners starting their Turkish journey or intermediate learners maintaining daily exposure.
 
 ## Category
 Education
@@ -46,4 +45,4 @@ Education
 English
 
 ## Website
-https://github.com/meowmeowco/sideload-spanish
+https://github.com/sideloadlanguage/sideloadturkish

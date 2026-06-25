@@ -1,4 +1,4 @@
-// Sideload Spanish — Popup Dashboard + Settings
+// Sideload Turkish — Popup Dashboard + Settings
 
 document.addEventListener('DOMContentLoaded', async () => {
   const TIER_LABELS = { 1: 'A1', 2: 'A2', 3: 'B1', 4: 'B2', 5: 'C1' };
@@ -133,20 +133,20 @@ document.addEventListener('DOMContentLoaded', async () => {
       const topWord = words[0];
       if (topWord) {
         const vocabEntry = fullVocab.find((v) => v.en.toLowerCase() === topWord.en);
-        const es = vocabEntry ? vocabEntry.es : topWord.en;
-        strugglingHint.textContent += ` — most seen: "${es}" (${topWord.seen}x)`;
+        const tr = (vocabEntry && vocabEntry.tr) ? vocabEntry.tr : topWord.en;
+        strugglingHint.textContent += ` — most seen: "${tr}" (${topWord.seen}x)`;
       }
 
       // Show up to 20 words
       const capped = words.slice(0, 20);
       for (const word of capped) {
         const vocabEntry = fullVocab.find((v) => v.en.toLowerCase() === word.en);
-        const es = vocabEntry ? vocabEntry.es : '?';
+        const tr = (vocabEntry && vocabEntry.tr) ? vocabEntry.tr : '?';
 
         const row = document.createElement('div');
         row.className = 'struggling-row';
         row.innerHTML = `
-          <span class="struggling-row__word">${es}</span>
+          <span class="struggling-row__word">${tr}</span>
           <span class="struggling-row__original">${word.en}</span>
           <span class="struggling-row__seen">${word.seen}x</span>
           <button class="struggling-row__know btn btn--tiny">Know it</button>
@@ -249,7 +249,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const syncNowBtn = document.getElementById('syncNowBtn');
   const disconnectSyncBtn = document.getElementById('disconnectSyncBtn');
 
-  const SYNC_API = 'https://sideload-sync-0sfsjx4d.fermyon.app';
+  // Sync deferred (waitlist) — set when a Turkish sync backend is provisioned.
+  const SYNC_API = '';
 
   async function loadSyncState() {
     const items = await new Promise((resolve) => {
@@ -393,7 +394,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (response.error === 'EXPIRED') {
           syncStatus.textContent = 'Subscription expired';
           syncNowBtn.textContent = 'Renew';
-          syncNowBtn.onclick = () => { window.open('https://sideloadspanish.com/renew', '_blank'); };
+          syncNowBtn.onclick = () => { window.open('https://sideloadturkish.com/renew', '_blank'); };
         } else if (response.error === 'INVALID_KEY') {
           syncStatus.textContent = 'Key invalid — re-enter your key';
           showSyncSetup();

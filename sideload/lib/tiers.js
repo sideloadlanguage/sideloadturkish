@@ -1,4 +1,4 @@
-// Sideload Spanish — Tier System
+// Sideload Turkish — Tier System
 // Tier unlock logic and replacement density scaling.
 
 const SideloadTiers = (() => {
@@ -24,7 +24,7 @@ const SideloadTiers = (() => {
 
   /**
    * Count total words per tier in the vocabulary.
-   * @param {Array<{en: string, es: string, tier: number}>} vocabulary
+   * @param {Array<{en: string, tr: string, tier: number}>} vocabulary
    * @returns {Object<number, number>} tier → total count
    */
   function countWordsPerTier(vocabulary) {
@@ -83,9 +83,9 @@ const SideloadTiers = (() => {
 
   /**
    * Filter vocabulary to only include words from unlocked tiers.
-   * @param {Array<{en: string, es: string, tier: number}>} vocabulary
+   * @param {Array<{en: string, tr: string, tier: number}>} vocabulary
    * @param {Set<number>} unlockedTiers
-   * @returns {Array<{en: string, es: string, tier: number}>}
+   * @returns {Array<{en: string, tr: string, tier: number}>}
    */
   function filterByUnlockedTiers(vocabulary, unlockedTiers) {
     return vocabulary.filter((entry) => unlockedTiers.has(entry.tier));

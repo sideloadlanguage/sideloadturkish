@@ -1,12 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "Sideload Spanish",
-  "version": "0.1.5",
-  "description": "Learn Spanish while browsing — words on pages are progressively replaced with Spanish translations based on your level.",
+  "name": "Sideload Turkish",
+  "version": "0.1.0",
+  "description": "Learn Turkish while browsing — words on pages are progressively replaced with Turkish translations based on your level.",
   "permissions": ["storage"],
-  "host_permissions": [
-    "https://sideload-sync-0sfsjx4d.fermyon.app/*"
-  ],
   "background": {
     "service_worker": "background/service-worker.js"
   },

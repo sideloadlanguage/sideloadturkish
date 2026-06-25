@@ -124,22 +124,6 @@ describe('tier (min)', () => {
   });
 });
 
-describe('gender (first non-null wins)', () => {
-  it('takes local when both present', () => {
-    const local = [word('house', { gender: 'f' })];
-    const remote = [word('house', { gender: 'm' })];
-    const merged = mergeWordSets(local, remote);
-    expect(merged[0].gender).toBe('f');
-  });
-
-  it('takes remote when local is undefined', () => {
-    const local = [word('house', { gender: undefined })];
-    const remote = [word('house', { gender: 'm' })];
-    const merged = mergeWordSets(local, remote);
-    expect(merged[0].gender).toBe('m');
-  });
-});
-
 describe('commutativity', () => {
   it('merge(a, b) equals merge(b, a) for field values', () => {
     const a = [word('house', { known: true, seen: 3, clicked_known: 1, tier: 2 })];

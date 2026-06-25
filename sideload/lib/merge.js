@@ -1,4 +1,4 @@
-// Sideload Spanish — Client-Side Merge (G-Set CRDT)
+// Sideload Turkish — Client-Side Merge (G-Set CRDT)
 //
 // Known-words is a grow-only set. No words are ever removed.
 // Per-word merge is deterministic and commutative.
@@ -8,14 +8,12 @@
 //   seen        = max(a, b)
 //   clicked_known = max(a, b)
 //   tier        = min(a, b)        (conservative: keep lower tier on conflict)
-//   gender      = a || b           (first non-null wins, immutable property)
-
+//
+// @param {Array<{ en: string, known: boolean, clicked_known: number, seen: number, tier: number }>} localRecords
+// @param {Array<{ en: string, known: boolean, clicked_known: number, seen: number, tier: number }>} remoteRecords
+// @returns {Array<{ en: string, known: boolean, clicked_known: number, seen: number, tier: number }>}
 /**
  * Merge two arrays of word records into a single deduplicated set.
- *
- * @param {Array<{ en: string, known: boolean, clicked_known: number, seen: number, tier: number, gender?: string }>} localRecords
- * @param {Array<{ en: string, known: boolean, clicked_known: number, seen: number, tier: number, gender?: string }>} remoteRecords
- * @returns {Array<{ en: string, known: boolean, clicked_known: number, seen: number, tier: number, gender?: string }>}
  */
 function mergeWordSets(localRecords, remoteRecords) {
   const merged = new Map();
@@ -38,7 +36,6 @@ function mergeWordSets(localRecords, remoteRecords) {
       clicked_known: Math.max(local.clicked_known, remote.clicked_known),
       seen: Math.max(local.seen, remote.seen),
       tier: Math.min(local.tier, remote.tier),
-      gender: local.gender || remote.gender,
     });
   }
 

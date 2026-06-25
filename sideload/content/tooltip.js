@@ -1,4 +1,4 @@
-// Sideload Spanish — Tooltip & Click-to-Know
+// Sideload Turkish — Tooltip & Click-to-Know
 // Hover shows original word + tier. Click marks word as known.
 
 (() => {
@@ -59,14 +59,14 @@
 
     const original = target.dataset.original;
     const tier = parseInt(target.dataset.tier, 10);
-    const wordToTrack = (target.dataset.noun || original).toLowerCase();
+    const wordToTrack = original.toLowerCase();
 
     // Record seen — debounced to once per word per page load
     if (!seenThisPageLoad.has(wordToTrack) && typeof SideloadStorage !== 'undefined') {
       seenThisPageLoad.add(wordToTrack);
       SideloadStorage.recordSeen(wordToTrack, tier).catch(() => {});
     }
-    const spanish = target.dataset.es;
+    const turkish = target.dataset.tr;
     const tierLabel = TIER_LABELS[tier] || `Tier ${tier}`;
     const isKnown = target.classList.contains('sideload-word--known');
 
@@ -82,17 +82,8 @@
     // Translation
     const transLine = document.createElement('div');
     transLine.className = 'sideload-tooltip__translation';
-    transLine.textContent = `→ ${spanish}`;
+    transLine.textContent = `→ ${turkish}`;
     tip.appendChild(transLine);
-
-    // Gender (for nouns)
-    const gender = target.dataset.gender;
-    if (gender) {
-      const genderLine = document.createElement('div');
-      genderLine.className = 'sideload-tooltip__gender';
-      genderLine.textContent = gender === 'f' ? '♀ feminine' : '♂ masculine';
-      tip.appendChild(genderLine);
-    }
 
     // Seen count (populated async — hidden until loaded, only shown if seen > 1)
     const seenLine = document.createElement('div');
@@ -156,9 +147,7 @@
 
     const tier = parseInt(target.dataset.tier, 10);
 
-    // For compounds ("the house"), mark the noun as known, not the article
-    // data-noun is set by replacer for compounds; falls back to data-original for single words
-    const wordToMark = target.dataset.noun || target.dataset.original;
+    const wordToMark = target.dataset.original;
 
     // Visual feedback: brief pulse then known state
     target.classList.add('sideload-word--pulse');
