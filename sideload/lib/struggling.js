@@ -1,4 +1,4 @@
-// Sideload Spanish — Struggling Word Detection
+// Sideload Turkish — Struggling Word Detection
 // Identifies words the user keeps seeing but can't mark as known.
 
 const SideloadStruggling = (() => {

@@ -1,4 +1,4 @@
-// Sideload Spanish — Background Service Worker (CQRS)
+// Sideload Turkish — Background Service Worker (CQRS)
 //
 // Commands (write): mutate word records in IndexedDB, then update read projections.
 // Queries (read): return pre-computed projections — no table scans.
@@ -12,7 +12,7 @@
 
 // ── IndexedDB ──
 
-const DB_NAME = 'sideload-spanish';
+const DB_NAME = 'sideload-turkish';
 const DB_VERSION = 1;
 const WORDS_STORE = 'words';
 const SETTINGS_STORE = 'settings';
@@ -323,7 +323,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 // ── Sync engine ──
 
-const SYNC_API = 'https://sideload-sync-0sfsjx4d.fermyon.app';
+// Sync is deferred (waitlist). No Turkish backend exists yet — set this and add the
+// matching manifest host_permissions when a Turkish sync host is provisioned.
+const SYNC_API = '';
 
 /**
  * Trigger a sync if conditions are met (debounce, not already in progress).
@@ -370,7 +372,6 @@ async function performSync(reason) {
       clicked_known: r.clicked_known,
       seen: r.seen,
       tier: r.tier,
-      gender: r.gender,
     }));
 
     // Derive encryption key
@@ -474,7 +475,6 @@ function syncMergeWordSets(localRecords, remoteRecords) {
       clicked_known: Math.max(local.clicked_known, remote.clicked_known),
       seen: Math.max(local.seen, remote.seen),
       tier: Math.min(local.tier, remote.tier),
-      gender: local.gender || remote.gender,
     });
   }
   return [...merged.values()];

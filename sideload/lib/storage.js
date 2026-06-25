@@ -1,4 +1,4 @@
-// Sideload Spanish — Storage Client
+// Sideload Turkish — Storage Client
 // Proxies all storage operations to the service worker via chrome.runtime messages.
 // The service worker owns the IndexedDB instance (extension origin),
 // making data accessible from content scripts, popup, and background alike.

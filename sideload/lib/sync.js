@@ -1,4 +1,4 @@
-// Sideload Spanish — Sync Client
+// Sideload Turkish — Sync Client
 //
 // Orchestrates pull → decrypt → merge → encrypt → push.
 // All crypto happens client-side; the server only stores opaque blobs.
@@ -7,8 +7,9 @@
 //             lib/merge.js  (mergeWordSets)
 
 const SideloadSync = (() => {
-  // Configurable base URL — override for local dev
-  const SYNC_API = 'https://sideload-sync-0sfsjx4d.fermyon.app';
+  // Sync is deferred (waitlist). No Turkish backend exists yet — set this and add the
+  // matching manifest host_permissions when a Turkish sync host is provisioned.
+  const SYNC_API = '';
 
   function authHeaders(licenseKey) {
     return {
@@ -75,7 +76,7 @@ const SideloadSync = (() => {
    * @param {string} licenseKey
    * @param {string} pin
    * @param {string} accountId
-   * @param {Array<{ en: string, known: boolean, clicked_known: number, seen: number, tier: number, gender?: string }>} localWords
+   * @param {Array<{ en: string, known: boolean, clicked_known: number, seen: number, tier: number }>} localWords
    * @returns {Promise<{ merged: Array, pushed: boolean }>}
    */
   async function syncFull(licenseKey, pin, accountId, localWords) {

@@ -1,4 +1,4 @@
-// Sideload Spanish — E2E Encryption
+// Sideload Turkish — E2E Encryption
 //
 // All sync data is encrypted client-side before leaving the device.
 // The server never sees plaintext — it stores opaque { iv, ciphertext } blobs.

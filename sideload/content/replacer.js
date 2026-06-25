@@ -1,5 +1,5 @@
-// Sideload Spanish — Content Script: Word Replacer
-// Walks DOM text nodes, replaces English words with Spanish translations.
+// Sideload Turkish — Content Script: Word Replacer
+// Walks DOM text nodes, replaces English words with Turkish translations.
 // Integrates with SideloadTiers for difficulty progression and density scaling.
 
 (() => {
@@ -19,11 +19,10 @@
   const URL_RE = /https?:\/\/\S+/gi;
   const EMAIL_RE = /\S+@\S+\.\S+/gi;
 
-  // English articles that trigger compound replacement
+  // English articles — never replaced on their own (Turkish has no articles)
   const ARTICLES = new Set(['the', 'a', 'an']);
 
-  let vocabMap = null;       // Map<lowercase_en, { es, tier, gender }> — filtered by unlocked tiers
-  let esWordsSet = null;     // Set<lowercase_es> — used to skip already-translated words
+  let vocabMap = null;       // Map<lowercase_en, { tr, tier }> — filtered by unlocked tiers, tr non-null only
   let fullVocab = [];        // Raw vocabulary array (all tiers)
   let wordsPerTier = {};     // tier → total word count
   let knownWords = new Set(); // Words marked as known in IndexedDB
@@ -42,12 +41,6 @@
       fullVocab = await response.json();
 
       wordsPerTier = SideloadTiers.countWordsPerTier(fullVocab);
-
-      // Build set of all Spanish translations to detect already-replaced text
-      esWordsSet = new Set();
-      for (const entry of fullVocab) {
-        esWordsSet.add(entry.es.toLowerCase());
-      }
 
       console.log(`[Sideload] Vocabulary loaded: ${fullVocab.length} words across ${Object.keys(wordsPerTier).length} tiers`);
     } catch (err) {
@@ -81,14 +74,15 @@
 
     vocabMap = new Map();
     for (const entry of filtered) {
+      // Skip entries with no translation yet (tr === null while translation is pending)
+      if (!entry.tr) continue;
       vocabMap.set(entry.en.toLowerCase(), {
-        es: entry.es,
+        tr: entry.tr,
         tier: entry.tier,
-        gender: entry.gender || null,
       });
     }
 
-    const maxTier = Math.max(...unlockedTiers);
+    const maxTier = unlockedTiers.length ? Math.max(...unlockedTiers) : 0;
     console.log(`[Sideload] Active: ${vocabMap.size} words, tier ${maxTier} unlocked, density ${(currentDensity * 100).toFixed(0)}%`);
   }
 
@@ -143,107 +137,32 @@
   }
 
   /**
-   * Get the Spanish article for a given English article + gender.
-   * @param {string} enArticle - 'the', 'a', or 'an'
-   * @param {string} gender - 'm' or 'f'
-   * @returns {string} Spanish article
-   */
-  function getSpanishArticle(enArticle, gender) {
-    if (enArticle === 'the') {
-      return gender === 'f' ? 'la' : 'el';
-    }
-    // 'a' or 'an'
-    return gender === 'f' ? 'una' : 'un';
-  }
-
-  /**
-   * Find all potential word matches in a text node, including article+noun compounds.
-   * Returns array of match objects:
-   *   Single: { word, wordLower, entry, index, length, compound: false }
-   *   Compound: { word, wordLower, entry, index, length, compound: true,
-   *               article, articleEs, fullOriginal, fullEs }
+   * Find all single-word matches in a text node.
+   * Returns array of match objects: { word, wordLower, entry, index, length }
    */
   function findMatches(text) {
     const matches = [];
-    const allWords = [];
     WORD_RE.lastIndex = 0;
     let match;
 
-    // First pass: collect all word positions
     while ((match = WORD_RE.exec(text)) !== null) {
-      allWords.push({
-        word: match[1],
-        wordLower: match[1].toLowerCase(),
-        index: match.index,
-        length: match[0].length,
-      });
-    }
+      const word = match[1];
+      const wordLower = word.toLowerCase();
 
-    // Second pass: detect article+noun bigrams and single-word matches
-    const consumed = new Set(); // indices of words already part of a compound
-
-    for (let i = 0; i < allWords.length; i++) {
-      const w = allWords[i];
-
-      // Check if this is an article followed by a known noun with gender
-      if (ARTICLES.has(w.wordLower) && i + 1 < allWords.length) {
-        const next = allWords[i + 1];
-        const entry = vocabMap.get(next.wordLower);
-
-        // Only compound if the noun has a gender AND there's only whitespace between
-        // Also skip if the noun text is already a Spanish translation
-        if (entry && entry.gender && !(esWordsSet && esWordsSet.has(next.wordLower))) {
-          const gap = text.slice(w.index + w.length, next.index);
-          if (/^\s+$/.test(gap)) {
-            const articleEs = getSpanishArticle(w.wordLower, entry.gender);
-            // Preserve capitalisation: if article was "The", capitalise "La"/"El"
-            const isCapitalised = w.word[0] === w.word[0].toUpperCase() && w.word[0] !== w.word[0].toLowerCase();
-            const articleEsFinal = isCapitalised
-              ? articleEs[0].toUpperCase() + articleEs.slice(1)
-              : articleEs;
-
-            const fullOriginal = text.slice(w.index, next.index + next.length);
-            const fullEs = `${articleEsFinal} ${entry.es}`;
-
-            matches.push({
-              word: next.word,
-              wordLower: next.wordLower,
-              entry,
-              index: w.index,
-              length: (next.index + next.length) - w.index,
-              compound: true,
-              article: w.word,
-              articleEs: articleEsFinal,
-              fullOriginal,
-              fullEs,
-            });
-
-            consumed.add(i);
-            consumed.add(i + 1);
-            i++; // skip the noun, already consumed
-            continue;
-          }
-        }
-      }
-
-      // Single word match (skip if already consumed by compound)
-      if (consumed.has(i)) continue;
-
-      const entry = vocabMap.get(w.wordLower);
+      const entry = vocabMap.get(wordLower);
       if (!entry) continue;
-      if (isProbablyProperNoun(w.word, text, w.index)) continue;
-      // Skip standalone articles — they're only useful in compounds
-      if (ARTICLES.has(w.wordLower)) continue;
-      // Skip cognates where English === Spanish (e.g. "animal"→"animal") — no value in replacing
-      if (entry.es.toLowerCase() === w.wordLower) continue;
+      if (isProbablyProperNoun(word, text, match.index)) continue;
+      // Skip standalone English articles — not meaningful to replace
+      if (ARTICLES.has(wordLower)) continue;
+      // Skip cognates where English === Turkish (no value in replacing)
+      if (entry.tr.toLowerCase() === wordLower) continue;
 
       matches.push({
-        word: w.word,
-        wordLower: w.wordLower,
+        word,
+        wordLower,
         entry,
-        index: w.index,
-        length: w.length,
-        compound: false,
+        index: match.index,
+        length: match[0].length,
       });
     }
 
@@ -293,19 +212,9 @@
       if (isStruggling) cls += ' sideload-word--struggling';
       span.className = cls;
       span.dataset.tier = m.entry.tier;
-
-      if (m.compound) {
-        span.dataset.original = m.fullOriginal;
-        span.dataset.noun = m.wordLower;  // The noun word for progress tracking
-        span.dataset.es = m.fullEs;
-        span.dataset.gender = m.entry.gender;
-        span.textContent = m.fullEs;
-      } else {
-        span.dataset.original = m.word;
-        span.dataset.es = m.entry.es;
-        if (m.entry.gender) span.dataset.gender = m.entry.gender;
-        span.textContent = m.entry.es;
-      }
+      span.dataset.original = m.word;
+      span.dataset.tr = m.entry.tr;
+      span.textContent = m.entry.tr;
 
       fragment.appendChild(span);
       lastIndex = m.index + m.length;

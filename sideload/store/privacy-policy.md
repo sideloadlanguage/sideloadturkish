@@ -1,10 +1,10 @@
-# Privacy Policy — Sideload Spanish
+# Privacy Policy — Sideload Turkish
 
 **Last updated:** April 2026
 
 ## What data we collect
 
-None. Sideload Spanish does not collect, transmit, or store any personal data.
+None. Sideload Turkish does not collect, transmit, or store any personal data.
 
 ## What stays on your device
 
@@ -33,7 +33,7 @@ Uninstalling the extension removes all stored data. You can also reset progress 
 
 ## Contact
 
-For questions about this privacy policy: https://github.com/meowmeowco/sideload-spanish/issues
+For questions about this privacy policy: https://github.com/sideloadlanguage/sideloadturkish/issues
 
 ## Changes
 
