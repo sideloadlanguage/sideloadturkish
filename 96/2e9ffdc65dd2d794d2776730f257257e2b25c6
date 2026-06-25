@@ -1,0 +1,19 @@
+docs/TURKISH-LANGUAGE-REVIEW.md
+  s_5892f82792b358::t_88abe2cef66ff7 1-60
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "962e9ffdc65dd2d794d2776730f257257e2b25c6",
+  "prompts": {},
+  "sessions": {
+    "s_5892f82792b358": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "46b61914-1841-4fdb-a047-dbf4d8a9646e",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Marty <saint@ghost.lt>"
+    }
+  }
+}
